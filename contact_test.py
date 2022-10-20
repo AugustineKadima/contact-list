@@ -1,6 +1,6 @@
-from re import U
 import unittest
 from contact import Contact
+import pyperclip
 
 class TestContact(unittest.TestCase):
 
@@ -48,6 +48,30 @@ class TestContact(unittest.TestCase):
         found_contact = Contact.find_by_number("0711223344")
 
         self.assertEqual(found_contact.email,test_contact.email)
+
+
+    def test_contact_exists(self):
+        self.new_contact.save_contact()
+        test_contact = Contact("Test","user","0711223344","test@user.com") # new contact
+        test_contact.save_contact()
+
+        contact_exists = Contact.contact_exist("0711223344")
+
+        self.assertTrue(contact_exists)
+
+
+    def test_display_all_contacts(self):
+        self.assertEqual(Contact.display_contacts(),Contact.contact_list)
+
+        
+
+    def test_copy_email(self):
+        self.new_contact.save_contact()
+        Contact.copy_email("0712345678")
+
+        self.assertEqual(self.new_contact.email,pyperclip.paste())
+
+
 
 
 if __name__ == "__main__":
